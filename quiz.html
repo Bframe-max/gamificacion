@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz de Aplicaciones Informáticas</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f1f1f1; }
+    .quiz-container { background: #fff; padding: 20px; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; }
+    .question { margin-bottom: 20px; }
+    .options { list-style: none; padding: 0; }
+    .options li { margin-bottom: 10px; }
+    button { background-color: #007BFF; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; }
+    button:hover { background-color: #0056b3; }
+    .result { font-weight: bold; margin-top: 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz de Aplicaciones Informáticas</h1>
+    <div id="quiz"></div>
+    <button onclick="loadQuiz()">Reiniciar Quiz</button>
+    <div class="result" id="result"></div>
+    <div class="result" id="score"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "¿Qué es la informática?", answers: ["La ciencia que estudia los videojuegos.", "Ciencia que estudia el tratamiento automático de la información mediante computadoras.", "El arte de diseñar sitios web.", "La rama de las matemáticas que estudia los algoritmos."], correct: 1 },
+      { question: "¿Qué es un paquete ofimático?", answers: ["Un conjunto de juegos para computadora.", "Un dispositivo para imprimir documentos.", "Conjunto de programas como Word, Excel, PowerPoint usados para tareas de oficina.", "Un tipo de red de internet."], correct: 2 },
+      { question: "¿Qué es una aplicación informática?", answers: ["Un dispositivo para almacenar datos.", "Un tipo de virus de computadora.", "Un programa diseñado para realizar una tarea específica (ej: navegador, editor de texto).", "Un componente físico de la computadora."], correct: 2 },
+      { question: "¿Qué es una computadora?", answers: ["Un dispositivo de entretenimiento.", "Un dispositivo para hacer llamadas.", "Un dispositivo electrónico que procesa y almacena información.", "Una calculadora avanzada."], correct: 2 },
+      { question: "¿Qué es hardware y software?", answers: ["Hardware es el sistema operativo, software es la pantalla.", "Hardware es la parte física (monitor, teclado). Software es lo lógico (sistema operativo, apps).", "Hardware son los programas, software son los cables.", "Hardware es la información, software es el sonido."], correct: 1 },
+      { question: "¿Qué tipos de dispositivos existen?", answers: ["Grandes, pequeños y medianos.", "Entrada (teclado, mouse), salida (pantalla, impresora) y mixtos (pantalla táctil).", "Rápidos, lentos y normales.", "De almacenamiento, de red y de procesamiento."], correct: 1 },
+      { question: "¿Qué es el almacenamiento interno, externo y en línea?", answers: ["Interno: la nube. Externo: el disco duro. En línea: el USB.", "Interno: disco duro. Externo: USB. En línea: Google Drive, Dropbox.", "Interno: el teclado. Externo: el monitor. En línea: la impresora.", "Interno: la RAM. Externo: el procesador. En línea: el sistema operativo."], correct: 1 },
+      { question: "¿Qué es el mantenimiento preventivo y correctivo?", answers: ["Preventivo: reparación de fallas. Correctivo: limpieza.", "Preventivo: instalación de software. Correctivo: compra de hardware.", "Preventivo: limpieza, actualizaciones. Correctivo: reparación de fallas.", "Preventivo: formatear el disco. Correctivo: respaldar la información."], correct: 2 },
+      { question: "¿Qué es Internet?", answers: ["Una red local para compartir archivos en una oficina.", "Una red mundial que conecta computadoras para compartir información.", "Un programa para crear documentos.", "Un dispositivo para ver películas en línea."], correct: 1 },
+      { question: "¿Qué navegadores existen?", answers: ["Word, Excel, PowerPoint.", "Photoshop, Illustrator, InDesign.", "Chrome, Firefox, Edge, Safari, Opera.", "Windows, macOS, Linux."], correct: 2 },
+      { question: "¿Qué técnicas se usan para buscar información?", answers: ["Solo escribir una palabra y dar enter.", "Palabras clave, operadores booleanos (AND, OR, NOT), comillas para frases exactas, búsqueda por imagen.", "Preguntar a un amigo.", "Abrir muchas páginas al azar."], correct: 1 },
+      { question: "¿Qué es una biblioteca digital?", answers: ["Un lugar físico con muchos libros.", "Un sitio web con libros, artículos y documentos académicos para consultar y descargar.", "Un programa para leer libros electrónicos.", "Una tienda en línea de libros."], correct: 1 },
+      { question: "¿Qué es comunicación sincrónica y asincrónica?", answers: ["Sincrónica: por correo electrónico. Asincrónica: por videollamada.", "Sincrónica: en tiempo real (Zoom, Meet). Asincrónica: en momentos diferentes (correo, foros).", "Sincrónica: solo texto. Asincrónica: solo voz.", "Sincrónica: para trabajo. Asincrónica: para entretenimiento."], correct: 1 },
+      { question: "¿Qué es una cuenta en la nube?", answers: ["Una cuenta bancaria en línea.", "Un espacio personal en internet (Google, Microsoft, Dropbox) para guardar archivos.", "Un tipo de correo electrónico.", "Un programa para editar fotos."], correct: 1 },
+      { question: "¿Qué programas se usan para presentaciones?", answers: ["Word, Excel, Access.", "Photoshop, Illustrator, InDesign.", "PowerPoint, WPS Office, Prezi, Canva.", "Chrome, Firefox, Edge."], correct: 2 },
+      { question: "¿Qué elementos tienen las presentaciones de power point?", answers: ["Solo texto y números.", "Diapositivas, transiciones, animaciones, texto, imágenes, vídeos.", "Únicamente gráficos y tablas.", "Solo audios y videos."], correct: 1 },
+      { question: "¿Qué opciones tiene PowerPoint?", answers: ["Solo escribir texto y guardar.", "Insertar, diseño, transición, animación, vista, exportar a PDF.", "Realizar cálculos matemáticos complejos.", "Navegar por internet y enviar correos."], correct: 1 },
+      { question: "¿Qué funciones ofrece Word?", answers: ["Editar videos y crear música.", "Escribir, dar formato, insertar imágenes, crear tablas, referencias.", "Diseñar páginas web y programar aplicaciones.", "Gestionar bases de datos y realizar cálculos complejos."], correct: 1 },
+      { question: "¿Qué pestañas son clave en Word?", answers: ["Juegos, Ayuda, Configuración, Privacidad.", "Archivo, Inicio, Insertar, Diseño, Referencias, Vista.", "Internet, Correo, Redes, Contactos.", "Herramientas, Opciones, Ventanas, Macros."], correct: 1 },
+      { question: "¿Qué es el formato de texto?", answers: ["La cantidad de palabras en un documento.", "El estilo del texto: negrita, cursiva, subrayado, tamaño y color.", "La forma en que se guardan los archivos.", "El tipo de letra predeterminado en un documento."], correct: 1 },
+      { question: "¿Qué se hace con Excel?", answers: ["Editar fotografías y diseñar logotipos.", "Organizar datos, aplicar fórmulas, hacer gráficos y análisis.", "Crear presentaciones de diapositivas.", "Redactar documentos de texto y cartas."], correct: 1 },
+      { question: "¿Qué elementos contiene excel?", answers: ["Páginas, párrafos y encabezados.", "Diapositivas, transiciones y animaciones.", "Celdas, filas, columnas, fórmulas, hojas, libros.", "Capas, filtros y pinceles."], correct: 2 },
+      { question: "¿Qué funciones básicas tiene excel?", answers: ["Copiar, pegar, cortar y deshacer.", "Abrir, cerrar, guardar e imprimir.", "SUMA, PROMEDIO, SI, CONTAR, BUSCARV.", "Reproducir, pausar, avanzar y retroceder."], correct: 2 }
+    ];
+
+
+    let shuffledQuestions = [];
+    let score = 0;
+    let totalAnswered = 0;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function loadQuiz() {
+      const quiz = document.getElementById("quiz");
+      const result = document.getElementById("result");
+      const scoreBox = document.getElementById("score");
+      result.innerHTML = "";
+      scoreBox.innerHTML = "";
+      quiz.innerHTML = "";
+      score = 0;
+      totalAnswered = 0;
+
+      shuffledQuestions = shuffle([...questions]);
+
+      shuffledQuestions.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.className = "question";
+
+        const h3 = document.createElement("h3");
+        h3.textContent = `${index + 1}. ${q.question}`;
+        div.appendChild(h3);
+
+        const ul = document.createElement("ul");
+        ul.className = "options";
+
+        const shuffledAnswers = shuffle(q.answers.map((a, i) => ({ text: a, index: i })));
+
+        let answered = false;
+
+        shuffledAnswers.forEach(a => {
+          const li = document.createElement("li");
+          const button = document.createElement("button");
+          button.textContent = a.text;
+          button.onclick = () => {
+            if (answered) return;
+            answered = true;
+            totalAnswered++;
+            if (a.index === q.correct) {
+              button.style.backgroundColor = 'green';
+              score++;
+              result.innerHTML = "¡Correcto!";
+            } else {
+              button.style.backgroundColor = 'red';
+              result.innerHTML = `❌ Incorrecto. Respuesta correcta: ${q.answers[q.correct]}`;
+            }
+            if (totalAnswered === shuffledQuestions.length) {
+              scoreBox.innerHTML = `🎯 Puntaje final: ${score} de ${shuffledQuestions.length}`;
+            }
+          };
+          li.appendChild(button);
+          ul.appendChild(li);
+        });
+
+        div.appendChild(ul);
+        quiz.appendChild(div);
+      });
+    }
+
+    loadQuiz();
+  </script>
+</body>
+</html>
+
